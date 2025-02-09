@@ -1,0 +1,8 @@
+.navbar-style{
+  background-color: #2a67ad!important;
+}
+
+.navbar-nav .nav-link.active {
+  color: white !important; /* ✅ Keeps text white even when active */
+  font-weight: bold; /* ✅ Optional: Makes it look stronger */
+}
