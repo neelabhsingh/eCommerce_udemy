@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom"; // ✅ Use BrowserRouter
 import Login from "./Login";
 import Register from "./Register";
@@ -10,20 +10,27 @@ import "bootstrap/dist/css/bootstrap.css";
 import "font-awesome/css/font-awesome.css";
 import "./index.css";
 import NavBar from "./NavBar";
+import { UserContext } from "./UserContext";
 function App() {
+  let [user, setUser] = useState({
+    isLoggedIn: false,
+    currentUser: null,
+    currentUserName: null,
+  });
   return (
     <BrowserRouter>
-      <NavBar />
-
-      {/* ✅ Change HashRouter to BrowserRouter */}
-      <div className="container-fluid">
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="*" element={<NoMatchPage />} />
-        </Routes>
-      </div>
+      <UserContext.Provider value={{ user, setUser }}>
+        <NavBar />
+        {/* ✅ Change HashRouter to BrowserRouter */}
+        <div className="container-fluid">
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="*" element={<NoMatchPage />} />
+          </Routes>
+        </div>
+      </UserContext.Provider>
     </BrowserRouter>
   );
 }

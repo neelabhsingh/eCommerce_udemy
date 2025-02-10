@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
-let Register = () => {
+let Register = (props) => {
   const navigate = useNavigate(); // React Router v6
   let [state, setState] = useState({
     email: "neelabh@gmail.com",
@@ -47,7 +48,7 @@ let Register = () => {
   }, []);
 
   let [message, setMessage] = useState("");
-
+  let userContext = useContext(UserContext);
   //Validate
   let validate = () => {
     let errorData = {};
@@ -145,6 +146,16 @@ let Register = () => {
       });
 
       if (response.ok) {
+        let responseBody = await response.json();
+        console.log("Response Body: ", responseBody);
+
+        userContext.setUser({
+          ...useContext.user,
+          isLoggedIn: true,
+          currentUserName: responseBody.fullName,
+          currentUserId: responseBody.id,
+        });
+
         setMessage(
           <span className="text-success">Successfully Registered</span>
         );

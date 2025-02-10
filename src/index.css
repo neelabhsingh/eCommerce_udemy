@@ -6,3 +6,24 @@
   color: white !important; /* ✅ Keeps text white even when active */
   font-weight: bold; /* ✅ Optional: Makes it look stronger */
 }
+/* .nav-link.active{
+  color: white !important;
+  border-bottom: 2px solid white;
+}
+.header{
+  background-color: #e6e6e6;
+  position: sticky;
+  top:0;
+  z-index:1000;
+} */
+
+.header {
+  position: sticky;
+  top: 0;
+  background: linear-gradient(45deg, #007bff, #6610f2); /* Blue to Purple */
+  color: white; /* Ensure text is visible */
+  z-index: 1000;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0; /* Soft rounded corners */
+}

@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "./UserContext";
 
 const Login = (props) => {
   const navigate = useNavigate(); // React Router v6
   var [email, setEmail] = useState("");
   var [password, setPassword] = useState("");
+  let userContext = useContext(UserContext);
+
   let [dirty, setDirty] = useState({
     email: false,
     password: false,
@@ -82,12 +85,19 @@ const Login = (props) => {
         // );
 
         let response = await fetch(
-          `http://localhost:5001/users?email=${email}&password=${password}`
+          `http://localhost:5001/users?email=${email}&password=${password}`,
+          { method: "GET" }
         );
 
         if (response.ok) {
           let responseBody = await response.json();
           if (responseBody.length > 0) {
+            userContext.setUser({
+              ...userContext.user,
+              isLoggedIn: true,
+              currentUserName: responseBody[0].fullName,
+              currentUserId: responseBody[0].id,
+            });
             navigate("/dashboard");
           } else {
             setLoginMessage(
