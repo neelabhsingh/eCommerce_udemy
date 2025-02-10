@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 let Register = () => {
+  const navigate = useNavigate(); // React Router v6
   let [state, setState] = useState({
     email: "neelabh@gmail.com",
     password: "",
@@ -114,7 +115,7 @@ let Register = () => {
     setError(errorData);
   };
   useEffect(validate, [state]);
-  let onRegisterClick = async () => {git add README.md
+  let onRegisterClick = async () => {
     //Set all fields as dirty
     let dirtyData = { ...dirty };
     Object.keys(dirtyData).forEach((control) => {
@@ -147,6 +148,7 @@ let Register = () => {
         setMessage(
           <span className="text-success">Successfully Registered</span>
         );
+        navigate("/dashboard");
       } else {
         setMessage(
           <span className="text-danger">Error in database connection</span>
