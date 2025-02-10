@@ -6,6 +6,17 @@
   color: white !important; /* ✅ Keeps text white even when active */
   font-weight: bold; /* ✅ Optional: Makes it look stronger */
 }
+
+.navbar {
+  position: fixed; /* Keeps it at the top */
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #343a40; /* Dark theme */
+  color: white;
+  z-index: 1050; /* Higher than the Dashboard */
+  padding: 10px;
+}
 /* .nav-link.active{
   color: white !important;
   border-bottom: 2px solid white;
@@ -19,11 +30,11 @@
 
 .header {
   position: sticky;
-  top: 0;
-  background: linear-gradient(45deg, #007bff, #6610f2); /* Blue to Purple */
-  color: white; /* Ensure text is visible */
-  z-index: 1000;
+  top: 60px; /* Push it below the navbar */
+  background: linear-gradient(45deg, #007bff, #6610f2);
+  color: white;
+  z-index: 1000; /* Less than navbar */
   padding: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 0; /* Soft rounded corners */
+  border-radius: 8px;
 }
