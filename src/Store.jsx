@@ -175,7 +175,7 @@ function Store(props) {
           />
         </div>
       </div>
-      <div className="row">
+      <div className="row" style={{ marginTop: "60px" }}>
         <div className="col-lg-3 py-2">
           <div className="my-2">
             <h5>Brands</h5>
