@@ -78,7 +78,24 @@ const NavBar = () => {
                   }
                   to="/dashboard"
                 >
-                  Dashboard
+                  <i className="fa fa-dashboard"></i>Dashboard
+                </NavLink>
+              </li>
+            ) : (
+              ""
+            )}
+
+            {userContext.user.isLoggedIn ? (
+              <li className="nav-item">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive
+                      ? "nav-link active text-light"
+                      : "nav-link text-light"
+                  }
+                  to="/store"
+                >
+                  <i className="fa fa-shopping-bag"></i>Store
                 </NavLink>
               </li>
             ) : (

@@ -11,6 +11,7 @@ import "font-awesome/css/font-awesome.css";
 import "./index.css";
 import NavBar from "./NavBar";
 import { UserContext } from "./UserContext";
+import Store from "./Store";
 function App() {
   let [user, setUser] = useState({
     isLoggedIn: false,
@@ -27,6 +28,7 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/store" element={<Store />} />
             <Route path="*" element={<NoMatchPage />} />
           </Routes>
         </div>
