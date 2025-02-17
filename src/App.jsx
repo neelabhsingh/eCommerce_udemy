@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom"; // ✅ Use BrowserRouter
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import NoMatchPage from "./NoMatchPage";
@@ -13,6 +13,9 @@ import NavBar from "./NavBar";
 import { UserContext } from "./UserContext";
 import Store from "./Store";
 import ProductList from "./ProductList";
+import { auth } from "./firebaseConfig";
+import { signOut } from "firebase/auth";
+
 function App() {
   let [user, setUser] = useState({
     isLoggedIn: false,
@@ -20,11 +23,22 @@ function App() {
     currentUserName: null,
     currentUserRole: null,
   });
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    setUser({
+      isLoggedIn: false,
+      currentUser: null,
+      currentUserName: null,
+      currentUserRole: null,
+    });
+    alert("Logged Out!");
+  };
+
   return (
     <BrowserRouter>
       <UserContext.Provider value={{ user, setUser }}>
         <NavBar />
-        {/* ✅ Change HashRouter to BrowserRouter */}
         <div className="container-fluid">
           <Routes>
             <Route path="/" element={<Login />} />

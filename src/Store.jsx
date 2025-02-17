@@ -75,7 +75,7 @@ function Store(props) {
         }
       })();
     }
-  }, [brands, categories, search]); // Dependencies ensure products are fetched only when brands and categories are available
+  }, [brands]); // Dependencies ensure products are fetched only when brands and categories are available
 
   useEffect(() => {
     updateProductToShow();

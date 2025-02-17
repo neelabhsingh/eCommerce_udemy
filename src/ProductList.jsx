@@ -1,52 +1,85 @@
 import React, { useState, useEffect } from "react";
+import ReactPaginate from "react-paginate";
 import { BrandsService, CategoriesService, SortService } from "./Service";
 
 function ProductsList(props) {
-  //state
+  // state
+  let [brands, setBrands] = useState([]);
+  let [categories, setCategories] = useState([]);
   let [products, setProducts] = useState([]);
   let [originalProducts, setOriginalProducts] = useState([]);
   let [search, setSearch] = useState("");
   let [sortBy, setSortBy] = useState("productName");
-  let [sortOrder, setSortOrder] = useState("ASC"); //ASC or DESC
+  let [sortOrder, setSortOrder] = useState("ASC"); // ASC or DESC
+  let [currentPage, setCurrentPage] = useState(0);
+  let [productsPerPage] = useState(5); // Display only 5 products per page
 
-  //useEffect
   useEffect(() => {
     (async () => {
-      //get data from brands database
-      let brandsResponse = await BrandsService.fetchBrands();
-      let brandsResponseBody = await brandsResponse.json();
+      try {
+        // Fetch brands and categories concurrently
+        let [brandsResponse, categoriesResponse] = await Promise.all([
+          BrandsService.fetchBrands(),
+          CategoriesService.fetchCategories(),
+        ]);
 
-      //get data from categories database
-      let categoriesResponse = await CategoriesService.fetchCategories();
-      let categoriesResponseBody = await categoriesResponse.json();
+        let brandsResponseBody = await brandsResponse.json();
+        setBrands(brandsResponseBody);
 
-      //get data from products database
-      let productsResponse = await fetch(
-        `http://localhost:5001/products?productName_like=${search}&_sort=productName&_order=ASC`,
-        { method: "GET" }
-      );
-      let productsResponseBody = await productsResponse.json();
-
-      productsResponseBody.forEach((product) => {
-        product.brand = BrandsService.getBrandByBrandId(
-          brandsResponseBody,
-          product.brandId
-        );
-
-        product.category = CategoriesService.getCategoryByCategoryId(
-          categoriesResponseBody,
-          product.categoryId
-        );
-      });
-
-      setProducts(productsResponseBody);
-      setOriginalProducts(productsResponseBody);
+        let categoriesResponseBody = await categoriesResponse.json();
+        setCategories(categoriesResponseBody);
+        document.title = "Product - eCommerce";
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     })();
-  }, [search]);
+  }, []);
 
-  //when the user clicks on a column name to sort
+  // useEffect
+  useEffect(() => {
+    if (brands.length > 0 && categories.length > 0) {
+      (async () => {
+        // get data from brands database
+        let brandsResponse = await BrandsService.fetchBrands();
+        let brandsResponseBody = await brandsResponse.json();
+
+        // get data from categories database
+        let categoriesResponse = await CategoriesService.fetchCategories();
+        let categoriesResponseBody = await categoriesResponse.json();
+
+        // get data from products database
+        // let productsResponse = await fetch(
+        //   `http://localhost:5001/products?productName_like=${search}&_sort=productName&_order=ASC`,
+        //   { method: "GET" }
+        // );
+
+        let productsResponse = await fetch(
+          `http://localhost:5001/products?productName_like=${search}&_sort=productName&_order=ASC`,
+          { method: "GET" }
+        );
+        let productsResponseBody = await productsResponse.json();
+
+        productsResponseBody.forEach((product) => {
+          product.brand = BrandsService.getBrandByBrandId(
+            brandsResponseBody,
+            product.brandId
+          );
+
+          product.category = CategoriesService.getCategoryByCategoryId(
+            categoriesResponseBody,
+            product.categoryId
+          );
+        });
+
+        setProducts(productsResponseBody);
+        setOriginalProducts(productsResponseBody);
+      })();
+    }
+  }, [brands, categories]);
+
+  // when the user clicks on a column name to sort
   let onSortColumnNameClick = (event, columnName) => {
-    event.preventDefault(); //avoid refresh
+    event.preventDefault(); // avoid refresh
     setSortBy(columnName);
     let negatedSortOrder = sortOrder === "ASC" ? "DESC" : "ASC";
     setSortOrder(negatedSortOrder);
@@ -55,7 +88,7 @@ function ProductsList(props) {
     );
   };
 
-  //render column name
+  // render column name
   let getColumnHeader = (columnName, displayName) => {
     return (
       <React.Fragment>
@@ -80,6 +113,16 @@ function ProductsList(props) {
       </React.Fragment>
     );
   };
+
+  // handle page click
+  const handlePageClick = (event) => {
+    setCurrentPage(event.selected);
+  };
+
+  const offset = currentPage * productsPerPage;
+  const currentProducts = products.slice(offset, offset + productsPerPage);
+  const pageCount = Math.ceil(products.length / productsPerPage);
+
   return (
     <div className="row">
       <div className="col-12">
@@ -120,14 +163,14 @@ function ProductsList(props) {
                 </tr>
               </thead>
               <tbody>
-                {products.map((product) => (
+                {currentProducts.map((product) => (
                   <tr key={product.id}>
                     <td>{product.productName}</td>
                     <td>{product.price}</td>
-                    <td>{product.brand.brandName}</td>
-                    {/* <td>{product.brandId}</td> */}
-                    <td>{product.category.categoryName}</td>
-                    {/* <td>{product.categoryId}</td> */}
+                    <td>{product.brand ? product.brand.brandName : "N/A"}</td>
+                    <td>
+                      {product.category ? product.category.categoryName : "N/A"}
+                    </td>
                     <td>
                       {[...Array(product.rating).keys()].map((n) => {
                         return (
@@ -144,6 +187,19 @@ function ProductsList(props) {
                 ))}
               </tbody>
             </table>
+            <ReactPaginate
+              previousLabel={"previous"}
+              nextLabel={"next"}
+              breakLabel={"..."}
+              breakClassName={"break-me"}
+              pageCount={pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageClick}
+              containerClassName={"pagination"}
+              subContainerClassName={"pages pagination"}
+              activeClassName={"active"}
+            />
           </div>
         </div>
       </div>
