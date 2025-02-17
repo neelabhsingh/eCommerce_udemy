@@ -4,8 +4,8 @@ import { UserContext } from "./UserContext";
 
 const Login = (props) => {
   const navigate = useNavigate(); // React Router v6
-  var [email, setEmail] = useState("");
-  var [password, setPassword] = useState("");
+  var [email, setEmail] = useState("admin@gmail.com");
+  var [password, setPassword] = useState("Admin123");
   let userContext = useContext(UserContext);
 
   let [dirty, setDirty] = useState({
@@ -97,8 +97,16 @@ const Login = (props) => {
               isLoggedIn: true,
               currentUserName: responseBody[0].fullName,
               currentUserId: responseBody[0].id,
+              currentUserRole: responseBody[0].role,
             });
-            navigate("/dashboard");
+
+            //redirect to relavent page based on role
+            if (responseBody[0].role === "user") {
+              //redirect to /dashboard
+              navigate("/dashboard");
+            } else if (responseBody[0].role === "admin") {
+              navigate("/products");
+            }
           } else {
             setLoginMessage(
               <span className="text-danger">

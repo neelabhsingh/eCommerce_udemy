@@ -12,11 +12,13 @@ import "./index.css";
 import NavBar from "./NavBar";
 import { UserContext } from "./UserContext";
 import Store from "./Store";
+import ProductList from "./ProductList";
 function App() {
   let [user, setUser] = useState({
     isLoggedIn: false,
     currentUser: null,
     currentUserName: null,
+    currentUserRole: null,
   });
   return (
     <BrowserRouter>
@@ -29,6 +31,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/store" element={<Store />} />
+            <Route path="/products" element={<ProductList />} />
             <Route path="*" element={<NoMatchPage />} />
           </Routes>
         </div>

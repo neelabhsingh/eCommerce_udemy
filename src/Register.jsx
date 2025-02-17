@@ -11,6 +11,7 @@ let Register = (props) => {
     gender: "",
     country: "",
     receiveNewsLetter: false, // Use boolean instead of empty string
+    role: "user",
   });
 
   let [countries] = useState([
@@ -154,6 +155,7 @@ let Register = (props) => {
           isLoggedIn: true,
           currentUserName: responseBody.fullName,
           currentUserId: responseBody.id,
+          currentUserRole: responseBody.role,
         });
 
         setMessage(

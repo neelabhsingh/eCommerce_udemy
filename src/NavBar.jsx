@@ -11,6 +11,7 @@ const NavBar = () => {
       isLoggedIn: false,
       currentUserId: null,
       currentUserName: null,
+      currentUserRole: null,
     });
     navigate("/");
   };
@@ -68,7 +69,8 @@ const NavBar = () => {
               ""
             )}
 
-            {userContext.user.isLoggedIn ? (
+            {userContext.user.isLoggedIn &&
+            userContext.user.currentUserRole === "user" ? (
               <li className="nav-item">
                 <NavLink
                   className={({ isActive }) =>
@@ -85,7 +87,8 @@ const NavBar = () => {
               ""
             )}
 
-            {userContext.user.isLoggedIn ? (
+            {userContext.user.isLoggedIn &&
+            userContext.user.currentUserRole === "user" ? (
               <li className="nav-item">
                 <NavLink
                   className={({ isActive }) =>
@@ -96,6 +99,24 @@ const NavBar = () => {
                   to="/store"
                 >
                   <i className="fa fa-shopping-bag"></i>Store
+                </NavLink>
+              </li>
+            ) : (
+              ""
+            )}
+
+            {userContext.user.isLoggedIn &&
+            userContext.user.currentUserRole === "admin" ? (
+              <li className="nav-item">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive
+                      ? "nav-link active text-light"
+                      : "nav-link text-light"
+                  }
+                  to="/products"
+                >
+                  <i className="fa fa-suitcase"></i>Products
                 </NavLink>
               </li>
             ) : (

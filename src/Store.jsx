@@ -49,8 +49,9 @@ function Store(props) {
       (async () => {
         try {
           //let productsResponse = await ProductService.fetchProducts();
+          //get data from products database
           let productsResponse = await fetch(
-            `http://localhost:5001/products?productName_like=${search}`,
+            `http://localhost:5001/products?productName_like=${search}&_sort=productName&_order=ASC`,
             { method: "GET" }
           );
           if (productsResponse.ok) {
